@@ -1,0 +1,61 @@
+# Build results
+bin/
+obj/
+
+# User-specific files
+*.rsuser
+*.user
+*.suo
+*.userosscache
+*.userprefs
+
+# Visual Studio specific
+.vs/
+
+# Logs
+*.log
+Logs/
+
+# IDE settings
+.idea/
+*.sln.iml
+
+# Backup files
+*.bak
+*.swp
+*.temp
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Dependency directories
+node_modules/
+bower_components/
+
+# NuGet packages
+*.nupkg
+packages/
+project.lock.json
+project.fragment.lock.json
+
+# Publish output
+wwwroot/dist/
+wwwroot/lib/
+
+# Coverage reports
+coverage/
+*.coverage
+*.coveragexml
+
+# Debug and Release folders
+Debug/
+Release/
+
+# Rider IDE specific
+.idea/
+
+# Azure related
+.vscode/
+.localhistory/
+*.publishsettings
