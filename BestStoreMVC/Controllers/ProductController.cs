@@ -1,10 +1,13 @@
 ﻿using BestStoreMVC.Repositories;
 using BestStoreMVC.Services;
 using BestStoreMVC.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BestStoreMVC.Controllers
 {
+    [Authorize(Roles = "admin")]
+
     [Route("/Admin/[controller]/{action=Index}/{id?}")]
     public class ProductController : Controller
     {

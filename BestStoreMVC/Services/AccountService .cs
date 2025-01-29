@@ -1,6 +1,7 @@
 ﻿using BestStoreMVC.DTOs;
 using BestStoreMVC.Models;
 using Microsoft.AspNetCore.Identity;
+using System.Security.Claims;
 
 namespace BestStoreMVC.Services
 {
@@ -41,11 +42,53 @@ namespace BestStoreMVC.Services
             return result;
         }
 
+        public async Task SignOutAsync()
+        {
+            await _signInManager.SignOutAsync();
+        }
+
         public async Task<bool> LoginAsync(string email, string password, bool rememberMe)
         {
             var result = await _signInManager.PasswordSignInAsync(email, password, rememberMe, lockoutOnFailure: false);
             return result.Succeeded;
         }
+
+        public async Task<ProfileDto?> GetProfileAsync(ClaimsPrincipal user)
+        {
+            var appUser = await _userManager.GetUserAsync(user);
+            if (appUser == null)
+            {
+                return null;
+            }
+
+            return new ProfileDto
+            {
+                FirstName = appUser.FirstName,
+                LastName = appUser.LastName,
+                Email = appUser.Email ?? "",
+                PhoneNumber = appUser.PhoneNumber,
+                Address = appUser.Address
+            };
+        }
+
+        public async Task<IdentityResult> UpdateProfileAsync(ClaimsPrincipal user, ProfileDto profileDto)
+        {
+            var appUser = await _userManager.GetUserAsync(user);
+            if (appUser == null)
+            {
+                return IdentityResult.Failed(new IdentityError { Description = "User not found" });
+            }
+
+            appUser.FirstName = profileDto.FirstName;
+            appUser.LastName = profileDto.LastName;
+            appUser.UserName = profileDto.Email;
+            appUser.Email = profileDto.Email;
+            appUser.PhoneNumber = profileDto.PhoneNumber;
+            appUser.Address = profileDto.Address;
+
+            return await _userManager.UpdateAsync(appUser);
+        }
+
 
     }
 }
