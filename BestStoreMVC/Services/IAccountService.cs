@@ -11,5 +11,8 @@ namespace BestStoreMVC.Services
         Task<bool> LoginAsync(string email, string password, bool rememberMe);
         Task<ProfileDto?> GetProfileAsync(ClaimsPrincipal user);
         Task<IdentityResult> UpdateProfileAsync(ClaimsPrincipal user, ProfileDto profileDto);
+        Task<IdentityResult> ChangePasswordAsync(ClaimsPrincipal user, PasswordDto passwordDto);
+        Task<bool> ForgotPasswordAsync(string email);
+        Task<IdentityResult> ResetPasswordAsync(string email, string token, string newPassword);
     }
 }
