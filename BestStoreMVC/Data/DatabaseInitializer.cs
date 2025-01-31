@@ -14,7 +14,6 @@ namespace BestStoreMVC.Data
                 return;
             }
 
-            // Check for roles
             var roles = new[] { "admin", "seller", "client" };
             foreach (var role in roles)
             {
@@ -25,7 +24,6 @@ namespace BestStoreMVC.Data
                 }
             }
 
-            // Check for admin users
             var adminUsers = await userManager.GetUsersInRoleAsync("admin");
             if (adminUsers.Any())
             {
@@ -33,7 +31,6 @@ namespace BestStoreMVC.Data
                 return;
             }
 
-            // Create the admin user
             var user = new ApplicationUser()
             {
                 FirstName = "Admin",

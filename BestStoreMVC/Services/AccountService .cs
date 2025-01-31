@@ -126,7 +126,6 @@ namespace BestStoreMVC.Services
 
             var token = await _userManager.GeneratePasswordResetTokenAsync(user);
 
-            // استخدام IUrlHelper لإنشاء الرابط
             var urlHelper = _urlHelperFactory.GetUrlHelper(_actionContextAccessor.ActionContext);
             string resetUrl = _configuration["AppSettings:BaseUrl"] +
                               urlHelper.Action("ResetPassword", "Account", new { token }, protocol: "https");

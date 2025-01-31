@@ -43,6 +43,7 @@ namespace BestStoreMVC
             builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             builder.Services.AddScoped<IProductService, ProductService>();
             builder.Services.AddScoped<IAccountService, AccountService>();
+            builder.Services.AddScoped<IUserService, UserService>();
 
 
 
@@ -67,7 +68,6 @@ namespace BestStoreMVC
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
 
-            // create the roles and the first admin user if not available yet
             using (var scope = app.Services.CreateScope())
             {
                 var userManager = scope.ServiceProvider.GetService(typeof(UserManager<ApplicationUser>))
