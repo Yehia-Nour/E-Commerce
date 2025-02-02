@@ -3,7 +3,7 @@ using sib_api_v3_sdk.Api;
 using sib_api_v3_sdk.Model;
 using System.Diagnostics;
 
-namespace BestStoreMVC.Services
+namespace BestStoreMVC.Data
 {
     public class EmailSender
     {
