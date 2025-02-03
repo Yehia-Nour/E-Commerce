@@ -1,6 +1,7 @@
 ﻿using BestStoreMVC.DTOs;
 using BestStoreMVC.Models;
 using Microsoft.AspNetCore.Identity;
+using System.Security.Claims;
 using System.Text.Json;
 
 namespace BestStoreMVC.Services
@@ -89,5 +90,67 @@ namespace BestStoreMVC.Services
 
             return true;
         }
+
+        public CartSummaryDto GetCartSummary(decimal shippingFee)
+        {
+            var httpContext = _httpContextAccessor.HttpContext!;
+            var cartItems = GetCartItems();
+            decimal total = GetTotal(shippingFee);
+            int cartSize = cartItems.Sum(item => item.Quantity);
+
+            string deliveryAddress = httpContext.Session.GetString("DeliveryAddress") ?? "";
+            string paymentMethod = httpContext.Session.GetString("PaymentMethod") ?? "";
+
+            return new CartSummaryDto
+            {
+                CartItems = cartItems,
+                Total = total,
+                CartSize = cartSize,
+                DeliveryAddress = deliveryAddress,
+                PaymentMethod = paymentMethod
+            };
+        }
+
+        public async Task<(bool success, string message)> CreateOrderAsync(ClaimsPrincipal user)
+        {
+            var httpContext = _httpContextAccessor.HttpContext!;
+            var userManager = httpContext.RequestServices.GetRequiredService<UserManager<ApplicationUser>>();
+            var appUser = await userManager.GetUserAsync(user);
+
+            if (appUser == null)
+            {
+                return (false, "User not found");
+            }
+
+            var cartItems = GetCartItems();
+            string deliveryAddress = httpContext.Session.GetString("DeliveryAddress") ?? "";
+            string paymentMethod = httpContext.Session.GetString("PaymentMethod") ?? "";
+
+            if (cartItems.Count == 0 || string.IsNullOrEmpty(deliveryAddress) || string.IsNullOrEmpty(paymentMethod))
+            {
+                return (false, "Invalid order details");
+            }
+
+            var order = new Order
+            {
+                ClientId = appUser.Id,
+                Items = cartItems,
+                ShippingFee = 10.0m,
+                DeliveryAddress = deliveryAddress,
+                PaymentMethod = paymentMethod,
+                PaymentStatus = "pending",
+                PaymentDetails = "",
+                OrderStatus = "created",
+                CreatedAt = DateTime.Now,
+            };
+
+            _context.Orders.Add(order);
+            await _context.SaveChangesAsync();
+
+            httpContext.Response.Cookies.Delete("shopping_cart");
+
+            return (true, "Order created successfully");
+        }
+
     }
 }

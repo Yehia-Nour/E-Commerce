@@ -1,5 +1,6 @@
 ﻿using BestStoreMVC.DTOs;
 using BestStoreMVC.Models;
+using System.Security.Claims;
 
 namespace BestStoreMVC.Services
 {
@@ -10,5 +11,7 @@ namespace BestStoreMVC.Services
         decimal GetTotal(decimal shippingFee);
         bool IsCartEmpty();
         bool ProcessCheckout(CheckoutDto model);
+        CartSummaryDto GetCartSummary(decimal shippingFee);
+        Task<(bool success, string message)> CreateOrderAsync(ClaimsPrincipal user);
     }
 }

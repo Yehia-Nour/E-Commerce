@@ -52,5 +52,39 @@ namespace BestStoreMVC.Controllers
 
             return RedirectToAction("Confirm");
         }
+
+        public IActionResult Confirm()
+        {
+            var summary = _cartService.GetCartSummary(shippingFee);
+
+            if (summary.CartSize == 0 || string.IsNullOrEmpty(summary.DeliveryAddress) || string.IsNullOrEmpty(summary.PaymentMethod))
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            ViewBag.DeliveryAddress = summary.DeliveryAddress;
+            ViewBag.PaymentMethod = summary.PaymentMethod;
+            ViewBag.Total = summary.Total;
+            ViewBag.CartSize = summary.CartSize;
+
+            return View();
+        }
+
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> Confirm(int any)
+        {
+            var (success, message) = await _cartService.CreateOrderAsync(User);
+
+            if (!success)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            ViewBag.SuccessMessage = message;
+            return View();
+        }
+
+
     }
 }
