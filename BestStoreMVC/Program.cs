@@ -45,8 +45,11 @@ namespace BestStoreMVC
             builder.Services.AddScoped<IAccountService, AccountService>();
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<ICartService, CartService>();
+            builder.Services.AddScoped<IAdminOrdersService, AdminOrdersService>();
 
-
+            builder.Services.AddControllersWithViews();
+            builder.Services.AddHttpContextAccessor();
+            builder.Services.AddSession();
 
 
             var app = builder.Build();
@@ -63,6 +66,9 @@ namespace BestStoreMVC
             app.UseStaticFiles();
 
             app.UseRouting();
+
+            app.UseSession();
+
 
             app.UseAuthorization();
 

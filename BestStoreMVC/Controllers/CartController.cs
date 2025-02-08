@@ -67,7 +67,7 @@ namespace BestStoreMVC.Controllers
             ViewBag.Total = summary.Total;
             ViewBag.CartSize = summary.CartSize;
 
-            return View();
+            return View(summary);
         }
 
         [Authorize]
