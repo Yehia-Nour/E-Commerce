@@ -46,6 +46,8 @@ namespace BestStoreMVC
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<ICartService, CartService>();
             builder.Services.AddScoped<IAdminOrdersService, AdminOrdersService>();
+            builder.Services.AddScoped<IClientOrdersService, ClientOrdersService>();
+
 
             builder.Services.AddControllersWithViews();
             builder.Services.AddHttpContextAccessor();
